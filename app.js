@@ -1,10 +1,10 @@
 let roughSvg = rough.svg(document.getElementById('svg'));
 
 const Directions = {
-    Left:   Symbol("left"),
-    Right:  Symbol("right"),
-    Up:     Symbol("up"),
-    Down:   Symbol("down")
+    Left    : Symbol("left"),
+    Right   : Symbol("right"),
+    Up      : Symbol("up"),
+    Down    : Symbol("down")
 }
 
 const __width       = 100;
@@ -13,8 +13,8 @@ const __gap         = 20;
 
 var __lastX         = null;
 var __lastY         = null;
-// var __lastWidth     = null;
-// var __lastHeight    = null;
+var __lastWidth     = null;
+var __lastHeight    = null;
 
 
 (function initializeFirstRectangle()
@@ -25,8 +25,8 @@ var __lastY         = null;
 
     __lastX         = initial_x;
     __lastY         = initial_y;
-    // __lastHeight    = __height;
-    // __lastWidth     = __width;
+    __lastHeight    = __height;
+    __lastWidth     = __width;
 })();
 
 (function initializeEventListeners()
@@ -62,28 +62,49 @@ var __lastY         = null;
 
 function addRectangle(width, height, direction) 
 {
-    let x = __lastX;
-    let y = __lastY;
+    let x           = __lastX;
+    let y           = __lastY;
+
+    let start_x     = 0;
+    let start_y     = 0;
+    let end_x       = 0;
+    let end_y       = 0;
 
     switch (direction)
     {
         case Directions.Left:
-            x -= (width + __gap);
+            x           -= (width + __gap);
+            start_x     = x + width;
+            start_y     = y + (height / 2);
+            end_x       = __lastX;
+            end_y       = __lastY + (__lastHeight / 2);
             break;
         case Directions.Right:
-            x += (width + __gap);
+            x           += (width + __gap);
+            start_x     = x;
+            start_y     = y + (height / 2);
+            end_x       = __lastX + __lastWidth;
+            end_y       = __lastY + (__lastHeight / 2);
             break;
         case Directions.Up:
-            y -= (height + __gap);
+            y           -= (height + __gap);
+            start_x     = x + (width / 2);
+            start_y     = y + height;
+            end_x       = __lastX + (__lastWidth / 2);
+            end_y       = __lastY;
             break;
         case Directions.Down:
-            y += (height + __gap);
+            y           += (height + __gap);
+            start_x     = x + (width / 2);
+            start_y     = y;
+            end_x       = __lastX + (__lastWidth / 2);
+            end_y       = __lastY + __lastHeight;
             break;
     }
 
     drawRectangle(x, y, width, height);
 
-    // drawLine()
+    drawLine(start_x, start_y, end_x, end_y);
 
     __lastX = x;
     __lastY = y;
