@@ -16,6 +16,8 @@ var __lastY         = null;
 var __lastWidth     = null;
 var __lastHeight    = null;
 
+var __generatedRectanglesPos = [];
+
 
 (function initializeFirstRectangle()
 {
@@ -102,16 +104,16 @@ function addRectangle(width, height, direction)
             break;
     }
 
-    drawRectangle(x, y, width, height);
-
-    drawLine(start_x, start_y, end_x, end_y);
-
-    __lastX = x;
-    __lastY = y;
+    if (drawRectangle(x, y, width, height))
+    {
+        drawLine(start_x, start_y, end_x, end_y);
+    }
 }
 
 function drawRectangle(x, y, width, height)
 {
+    if (__generatedRectanglesPos.some(pos => pos.x == x && pos.y == y)) return false;
+
     const rectangle = roughSvg.rectangle(x, y, width, height, { 
         fill: 'rgba(0, 255, 0, 0.5)',
         fillStyle: 'solid' 
@@ -123,6 +125,10 @@ function drawRectangle(x, y, width, height)
     __lastY         = y;
     __lastWidth     = width;
     __lastHeight    = height;
+
+    __generatedRectanglesPos.push({'x': x, 'y': y});
+
+    return true;
 }
 
 function drawLine(start_x, start_y, end_x, end_y)
