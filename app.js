@@ -60,6 +60,24 @@ var __generatedRectanglesPos = [];
 
         addRectangle(__width, __height, Directions.Down);
     })
+
+    document.addEventListener('keydown', (e) => {
+        switch (e.key)
+        {
+            case 'ArrowLeft':
+                addRectangle(__width, __height, Directions.Left);
+                break;
+            case 'ArrowRight':
+                addRectangle(__width, __height, Directions.Right);
+                break;
+            case 'ArrowUp':
+                addRectangle(__width, __height, Directions.Up);
+                break;
+            case 'ArrowDown':
+                addRectangle(__width, __height, Directions.Down);
+                break;
+        }
+    })
 })();
 
 function addRectangle(width, height, direction) 
@@ -107,6 +125,8 @@ function addRectangle(width, height, direction)
     if (drawRectangle(x, y, width, height))
     {
         drawLine(start_x, start_y, end_x, end_y);
+        
+        disableButtons();
     }
 }
 
@@ -135,4 +155,28 @@ function drawLine(start_x, start_y, end_x, end_y)
 {
     const line = roughSvg.line(start_x, start_y, end_x, end_y);
     svg.appendChild(line);
+}
+
+function disableButtons()
+{
+    
+    document.querySelector("#addRight").disabled    = __generatedRectanglesPos.some( pos => 
+        pos.x == __lastX + (__width + __gap) 
+        && pos.y == __lastY
+    );
+
+    document.querySelector("#addLeft").disabled     = __generatedRectanglesPos.some( pos => 
+        pos.x == __lastX - (__width + __gap) 
+        && pos.y == __lastY
+    );
+
+    document.querySelector("#addDown").disabled     = __generatedRectanglesPos.some( pos => 
+        pos.x == __lastX 
+        && pos.y == __lastY + (__height + __gap)
+    );
+
+    document.querySelector("#addUp").disabled       = __generatedRectanglesPos.some( pos => 
+        pos.x == __lastX 
+        && pos.y == __lastY - (__height + __gap)
+    );
 }
