@@ -159,24 +159,19 @@ function drawLine(start_x, start_y, end_x, end_y)
 
 function disableButtons()
 {
+    const shouldDisable = function (offsetX, offsetY)
+    {
+        return __generatedRectanglesPos.some( pos => 
+            pos.x == __lastX + offsetX 
+            && pos.y == __lastY + offsetY
+        );
+    }
+
+    document.querySelector("#addRight").disabled    = shouldDisable((__width + __gap), 0);
+
+    document.querySelector("#addLeft").disabled     = shouldDisable(-(__width + __gap), 0);
+
+    document.querySelector("#addDown").disabled     = shouldDisable(0, (__height + __gap));
     
-    document.querySelector("#addRight").disabled    = __generatedRectanglesPos.some( pos => 
-        pos.x == __lastX + (__width + __gap) 
-        && pos.y == __lastY
-    );
-
-    document.querySelector("#addLeft").disabled     = __generatedRectanglesPos.some( pos => 
-        pos.x == __lastX - (__width + __gap) 
-        && pos.y == __lastY
-    );
-
-    document.querySelector("#addDown").disabled     = __generatedRectanglesPos.some( pos => 
-        pos.x == __lastX 
-        && pos.y == __lastY + (__height + __gap)
-    );
-
-    document.querySelector("#addUp").disabled       = __generatedRectanglesPos.some( pos => 
-        pos.x == __lastX 
-        && pos.y == __lastY - (__height + __gap)
-    );
+    document.querySelector("#addUp").disabled       = shouldDisable(0, -(__height + __gap));
 }
